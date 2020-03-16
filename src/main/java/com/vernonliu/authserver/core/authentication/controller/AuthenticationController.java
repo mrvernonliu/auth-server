@@ -1,12 +1,14 @@
 package com.vernonliu.authserver.core.authentication.controller;
 
-import com.vernonliu.authserver.core.accounts.dto.NewAccountRequestDTO;
 import com.vernonliu.authserver.core.accounts.service.AccountService;
+import com.vernonliu.authserver.core.authentication.dto.LoginRequestDTO;
+import com.vernonliu.authserver.core.authentication.service.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -16,18 +18,19 @@ public class AuthenticationController {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    AuthenticationService authenticationService;
 
+    @PostMapping("/login")
     @ResponseBody
-    @PostMapping(value = "/create-account")
-    public ResponseEntity<?> createAccount(@RequestBody NewAccountRequestDTO newAccountRequest) {
-        try {
-            log.info(newAccountRequest.toString());
-            accountService.createAccount(newAccountRequest);
+    public ResponseEntity<?> loginEndpoint(@RequestBody LoginRequestDTO loginRequest,
+                                           @RequestParam String redirectUrl) throws Exception {
+        if (StringUtils.isEmpty(redirectUrl)) throw new Exception("Missing redirectUrl");
+        log.info(loginRequest.toString());
+        if (authenticationService.login(loginRequest)) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            log.error(e.toString());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -1,18 +1,17 @@
-package com.vernonliu.authserver.core.accounts.dto;
+package com.vernonliu.authserver.core.authentication.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.Email;
+
 @AllArgsConstructor
 @ToString
 @Getter
-public class NewAccountRequestDTO {
-    String firstname;
-    String lastname;
+public class LoginRequestDTO {
+    @Email
     String email;
-    String username;
-    @ToString.Exclude
     String password;
     String clientUuid;
 }

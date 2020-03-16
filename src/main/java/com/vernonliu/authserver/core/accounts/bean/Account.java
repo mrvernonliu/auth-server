@@ -2,6 +2,7 @@ package com.vernonliu.authserver.core.accounts.bean;
 
 import com.vernonliu.authserver.core.accounts.dto.NewAccountRequestDTO;
 import com.vernonliu.authserver.core.clients.bean.Client;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,6 +16,11 @@ import java.util.UUID;
 @Table(name = "accounts", uniqueConstraints = {
             @UniqueConstraint(columnNames = {"email", "client"})})
 @EntityListeners(AuditingEntityListener.class)
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Getter
+@Setter
 public class Account {
 
     @Id

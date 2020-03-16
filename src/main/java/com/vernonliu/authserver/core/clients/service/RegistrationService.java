@@ -14,16 +14,14 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class RegistrationService {
+
     @Autowired
     ClientDAO clientDAO;
     @Autowired
     RegistrationCodeDAO registrationCodeDAO;
-    @Autowired
-    ClientValidationService clientValidationService;
 
     public Client registerNewClient(ClientRegistrationDTO clientRegistrationDTO) throws Exception{
-        RegistrationCode registrationCode = clientValidationService
-                .validateRegistrationCode(clientRegistrationDTO.getRegistration_code());
+        RegistrationCode registrationCode = validateRegistrationCode(clientRegistrationDTO.getRegistration_code());
         if (registrationCode == null) {
             throw new Exception("Registration code is invalid");
         }
@@ -39,5 +37,11 @@ public class RegistrationService {
         registrationCodeDAO.save(registrationCode);
         log.info(registrationCode.toString());
         return registrationCodeDAO.findById(registrationCode.getId());
+    }
+
+    public RegistrationCode validateRegistrationCode(String registrationCode) {
+        RegistrationCode currentRegistrationCodeState = registrationCodeDAO.findById(UUID.fromString(registrationCode));
+        if (currentRegistrationCodeState.isRegistered()) return null;
+        return currentRegistrationCodeState;
     }
 }

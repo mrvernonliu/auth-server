@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class AuthServerApplication {
 
     public static void main(String[] args) {
+        System.setProperty("user.timezone", "UTC");
         SpringApplication.run(AuthServerApplication.class, args);
     }
 

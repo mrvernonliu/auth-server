@@ -1,7 +1,7 @@
-package com.vernonliu.authserver.core.tenants.dto;
+package com.vernonliu.authserver.core.clients.dto;
 
-import com.vernonliu.authserver.core.tenants.bean.FlowType;
-import com.vernonliu.authserver.core.tenants.bean.TokenType;
+import com.vernonliu.authserver.core.clients.bean.FlowType;
+import com.vernonliu.authserver.core.clients.bean.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.Value;

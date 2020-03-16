@@ -1,10 +1,7 @@
-package com.vernonliu.authserver.core.tenants.bean;
+package com.vernonliu.authserver.core.clients.bean;
 
-import com.vernonliu.authserver.core.tenants.dto.ClientRegistrationDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.vernonliu.authserver.core.clients.dto.ClientRegistrationDTO;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,9 +12,10 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "clients")
+@Table(name = "client")
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Builder

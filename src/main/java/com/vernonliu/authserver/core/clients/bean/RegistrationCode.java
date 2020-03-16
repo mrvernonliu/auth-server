@@ -1,6 +1,5 @@
-package com.vernonliu.authserver.core.tenants.bean;
+package com.vernonliu.authserver.core.clients.bean;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

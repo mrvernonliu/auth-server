@@ -1,10 +1,10 @@
-package com.vernonliu.authserver.core.tenants.service;
+package com.vernonliu.authserver.core.clients.service;
 
-import com.vernonliu.authserver.core.tenants.bean.Client;
-import com.vernonliu.authserver.core.tenants.bean.RegistrationCode;
-import com.vernonliu.authserver.core.tenants.dao.ClientDAO;
-import com.vernonliu.authserver.core.tenants.dao.RegistrationCodeDAO;
-import com.vernonliu.authserver.core.tenants.dto.ClientRegistrationDTO;
+import com.vernonliu.authserver.core.clients.bean.Client;
+import com.vernonliu.authserver.core.clients.bean.RegistrationCode;
+import com.vernonliu.authserver.core.clients.dao.ClientDAO;
+import com.vernonliu.authserver.core.clients.dao.RegistrationCodeDAO;
+import com.vernonliu.authserver.core.clients.dto.ClientRegistrationDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,15 +18,12 @@ public class RegistrationService {
     ClientDAO clientDAO;
     @Autowired
     RegistrationCodeDAO registrationCodeDAO;
+    @Autowired
+    ClientValidationService clientValidationService;
 
-    private RegistrationCode validateRegistrationCode(String registrationCode) {
-        RegistrationCode currentRegistrationCodeState = registrationCodeDAO.findById(UUID.fromString(registrationCode));
-        if (currentRegistrationCodeState.isRegistered()) return null;
-        return currentRegistrationCodeState;
-    }
-
-    public void registerNewClient(ClientRegistrationDTO clientRegistrationDTO) throws Exception{
-        RegistrationCode registrationCode = validateRegistrationCode(clientRegistrationDTO.getRegistration_code());
+    public Client registerNewClient(ClientRegistrationDTO clientRegistrationDTO) throws Exception{
+        RegistrationCode registrationCode = clientValidationService
+                .validateRegistrationCode(clientRegistrationDTO.getRegistration_code());
         if (registrationCode == null) {
             throw new Exception("Registration code is invalid");
         }
@@ -34,6 +31,7 @@ public class RegistrationService {
         clientDAO.save(newClient);
         registrationCode.setRegistered(true);
         registrationCodeDAO.save(registrationCode);
+        return newClient;
     }
 
     public RegistrationCode generateNewRegistrationCode() {

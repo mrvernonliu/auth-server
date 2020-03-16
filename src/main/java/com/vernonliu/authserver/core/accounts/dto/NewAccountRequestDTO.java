@@ -14,5 +14,4 @@ public class NewAccountRequestDTO {
     String username;
     String password;
     String clientUuid;
-    String clientSecret;
 }

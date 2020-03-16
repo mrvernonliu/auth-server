@@ -24,8 +24,6 @@ public class AccountService {
     public Account createAccount(NewAccountRequestDTO newAccountRequest) throws Exception {
         Client client = clientValidationService.validateClientUuid(newAccountRequest.getClientUuid());
         if (client == null) throw new Exception("Invalid Client");
-        if (!client.getClientSecret().equals(UUID.fromString(newAccountRequest.getClientSecret())))
-            throw new Exception("Invalid Client Secret");
         log.info(client.toString());
 
         //TODO hashing service

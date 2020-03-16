@@ -30,10 +30,4 @@ public class AuthenticationController {
         }
     }
 
-    @ResponseBody
-    @GetMapping(value = "/test", produces = "application/json")
-    public String helloWorld() {
-        log.info("test");
-        return "hello world";
-    }
 }

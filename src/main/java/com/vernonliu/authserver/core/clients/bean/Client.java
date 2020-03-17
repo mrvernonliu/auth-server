@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.security.Key;
 import java.util.Date;
 import java.util.UUID;
 
@@ -48,6 +49,13 @@ public class Client {
     @Column(name = "createdDate")
     @CreatedDate
     Date createdDate;
+
+    @Column(name = "privateKey", length = 512)
+    @ToString.Exclude
+    byte[] privateKey;
+
+    @Column(name = "publicKey", columnDefinition = "TEXT")
+    String publicKey;
 
     @OneToOne
     @JoinColumn(name = "registration_codes")

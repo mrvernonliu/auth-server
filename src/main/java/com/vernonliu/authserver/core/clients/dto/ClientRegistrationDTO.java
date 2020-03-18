@@ -16,7 +16,6 @@ public class ClientRegistrationDTO {
     FlowType flowType;
     TokenType tokenType;
     String adminEmail;
-    String redirectUrl;
     String registration_code;
 
 }

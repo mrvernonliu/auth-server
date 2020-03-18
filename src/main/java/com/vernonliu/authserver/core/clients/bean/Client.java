@@ -46,10 +46,6 @@ public class Client {
     @Email
     String adminAdmin;
 
-    @Column(name = "redirectUrl", nullable = false)
-    @URL
-    String redirectUrl;
-
     @Column(name = "createdDate", nullable = false)
     @CreatedDate
     Date createdDate;
@@ -71,7 +67,6 @@ public class Client {
         this.flowType = clientDTO.getFlowType();
         this.tokenType = clientDTO.getTokenType();
         this.adminAdmin = clientDTO.getAdminEmail();
-        this.redirectUrl = clientDTO.getRedirectUrl();
         this.registrationCode = registrationCode;
         this.clientSecret = UUID.randomUUID();
         // Do key stuff later

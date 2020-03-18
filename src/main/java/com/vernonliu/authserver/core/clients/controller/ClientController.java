@@ -3,6 +3,7 @@ package com.vernonliu.authserver.core.clients.controller;
 import com.vernonliu.authserver.core.clients.bean.Client;
 import com.vernonliu.authserver.core.clients.bean.RegistrationCode;
 import com.vernonliu.authserver.core.clients.dto.ClientRegistrationDTO;
+import com.vernonliu.authserver.core.clients.service.ClientService;
 import com.vernonliu.authserver.core.clients.service.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/client")
 @Slf4j
@@ -18,6 +21,9 @@ public class ClientController {
 
     @Autowired
     RegistrationService registrationService;
+
+    @Autowired
+    ClientService clientService;
 
     @PostMapping("/register")
     @ResponseBody
@@ -36,5 +42,12 @@ public class ClientController {
     @ResponseBody()
     public RegistrationCode generateNewRegistrationCode() {
         return registrationService.generateNewRegistrationCode();
+    }
+
+    @GetMapping("/info/{clientUuid}")
+    @ResponseBody
+    @CrossOrigin
+    public Map<String, String> getClientInfo(@PathVariable String clientUuid) {
+        return Map.of("clientName", clientService.getClientPublicInfoFromId(clientUuid));
     }
 }

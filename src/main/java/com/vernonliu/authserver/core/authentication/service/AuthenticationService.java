@@ -54,7 +54,7 @@ public class AuthenticationService {
     private void generateAuthenticationResponse(HttpServletResponse response, Client client, String redirectUrl, String jwt) {
         response.addCookie(new Cookie("ssoToken", jwt));
         response.setStatus(302);
-        response.setHeader("Location", client.getRedirectUrl());
+        response.setHeader("Location", redirectUrl);
     }
 
 

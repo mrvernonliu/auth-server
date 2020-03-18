@@ -21,7 +21,7 @@ public class ClientService {
         return client;
     }
 
-    public String getClientPublicInfoFromId(String clientUuid) {
+    public String getClientNameFromId(String clientUuid) {
         String clientName = clientDAO.findById(UUID.fromString(clientUuid)).getClientName();
         log.info(clientName);
         return clientName;

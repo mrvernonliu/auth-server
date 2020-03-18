@@ -48,6 +48,6 @@ public class ClientController {
     @ResponseBody
     @CrossOrigin
     public Map<String, String> getClientInfo(@PathVariable String clientUuid) {
-        return Map.of("clientName", clientService.getClientPublicInfoFromId(clientUuid));
+        return Map.of("clientName", clientService.getClientNameFromId(clientUuid));
     }
 }

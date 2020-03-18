@@ -4,6 +4,7 @@ import com.vernonliu.authserver.core.accounts.service.AccountService;
 import com.vernonliu.authserver.core.authentication.dto.LoginRequestDTO;
 import com.vernonliu.authserver.core.authentication.service.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/authentication")
@@ -24,15 +28,12 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     @ResponseBody
-    public ResponseEntity<?> loginEndpoint(@RequestBody LoginRequestDTO loginRequest,
-                                           @RequestParam String redirectUrl) throws Exception {
+    public void loginEndpoint(@RequestBody LoginRequestDTO loginRequest,
+                                           @RequestParam String redirectUrl,
+                                            HttpServletResponse response ) throws Exception {
         if (StringUtils.isEmpty(redirectUrl)) throw new Exception("Missing redirectUrl");
         log.info(loginRequest.toString());
-        String jwt = authenticationService.login(loginRequest);
-        if (StringUtils.isEmpty(jwt)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("ta", jwt);
-        return new ResponseEntity<>(headers, HttpStatus.OK);
+        authenticationService.login(loginRequest, redirectUrl, response);
     }
 
 }

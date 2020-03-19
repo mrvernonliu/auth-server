@@ -2,6 +2,7 @@ package com.vernonliu.authserver.core.cryptography.service;
 
 import com.vernonliu.authserver.core.accounts.bean.Account;
 import com.vernonliu.authserver.core.clients.bean.Client;
+import com.vernonliu.authserver.utils.DateUtil;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,14 @@ public class JwtService {
     @Autowired
     CryptographyService cryptographyService;
 
-
     public String createSSOToken(Account account, Client client) throws Exception {
         Key privateKey = cryptographyService.privateKeyToKeyObject(client.getPrivateKey());
-        Calendar now = Calendar.getInstance();
         String jwt = Jwts.builder()
                 .setIssuer(hostname)
                 .setAudience(client.getClientName())
                 .setSubject(account.getEmail())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(now.getTimeInMillis() + 3*HOUR))
+                .setExpiration(DateUtil.getDatePlusHours(3))
                 .signWith(privateKey)
                 .compact();
         // DO MORE THINGS

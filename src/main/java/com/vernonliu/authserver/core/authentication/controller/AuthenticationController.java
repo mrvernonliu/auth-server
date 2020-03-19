@@ -34,7 +34,6 @@ public class AuthenticationController {
                                             HttpServletResponse response,
                                             HttpServletRequest request ) throws Exception {
         if (StringUtils.isEmpty(loginRequest.getRedirectUrl())) throw new Exception("Missing redirectUrl");
-        log.info(Arrays.toString(request.getCookies()));
         log.info(loginRequest.toString());
         authenticationService.login(loginRequest, response);
     }

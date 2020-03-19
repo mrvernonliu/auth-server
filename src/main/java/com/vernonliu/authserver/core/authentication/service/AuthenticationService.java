@@ -53,17 +53,18 @@ public class AuthenticationService {
         log.warn("{} failed to log-in", account.getId());
     }
 
+    //TODO: make secure tokens
     private void generateAuthenticationResponse(HttpServletResponse response, Client client, String redirectUrl, String jwt) {
         Cookie ssoToken = new Cookie("ssoToken", jwt);
         ssoToken.setDomain(AUTH_WEBAPP_DOMAIN);
-        ssoToken.isHttpOnly();
-        ssoToken.setSecure(true);
+        ssoToken.setPath("/");
+        //ssoToken.isHttpOnly();
+        //ssoToken.setSecure(true);
+        ssoToken.setMaxAge(28800); //8 hours
         response.addCookie(ssoToken);
-        response.setStatus(302);
+        response.setStatus(200);
         response.setHeader("Location", redirectUrl);
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", AUTH_WEBAPP_ORIGIN);
     }
-
-
 }

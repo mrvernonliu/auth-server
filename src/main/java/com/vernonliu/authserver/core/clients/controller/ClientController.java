@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Map;
 
 @Controller
@@ -44,7 +46,7 @@ public class ClientController {
         return registrationService.generateNewRegistrationCode();
     }
 
-    @GetMapping("/info/{clientUuid}")
+    @PostMapping("/info/{clientUuid}")
     @ResponseBody
     @CrossOrigin
     public Map<String, String> getClientInfo(@PathVariable String clientUuid) {

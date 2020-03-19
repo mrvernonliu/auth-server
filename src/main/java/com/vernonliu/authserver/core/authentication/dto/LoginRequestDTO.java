@@ -14,4 +14,5 @@ public class LoginRequestDTO {
     String email;
     String password;
     String clientUuid;
+    String redirectUrl;
 }

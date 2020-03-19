@@ -31,9 +31,8 @@ public class AuthenticationService {
 
     @Autowired
     JwtService jwtService;
-
-    // TODO: place redirectUrl inside of the login request?
-    public void login(LoginRequestDTO loginRequest, String redirectUrl, HttpServletResponse response) throws Exception {
+    
+    public void login(LoginRequestDTO loginRequest, HttpServletResponse response) throws Exception {
         Client client = clientService.getClientFromId(loginRequest.getClientUuid());
         Account account = accountService.getAccount(loginRequest.getEmail(), client);
         if (account == null) throw new Exception("Account not found");
@@ -43,7 +42,7 @@ public class AuthenticationService {
             accountService.updateLastLogin(account);
             String jwt = jwtService.createSSOToken(account, client);
             if (!StringUtils.isEmpty(jwt)) {
-                generateAuthenticationResponse(response, client, redirectUrl, jwt);
+                generateAuthenticationResponse(response, client, loginRequest.getRedirectUrl(), jwt);
                 return;
             }
         }
@@ -52,9 +51,13 @@ public class AuthenticationService {
     }
 
     private void generateAuthenticationResponse(HttpServletResponse response, Client client, String redirectUrl, String jwt) {
-        response.addCookie(new Cookie("ssoToken", jwt));
+        Cookie ssoToken = new Cookie("ssoToken", jwt);
+        ssoToken.setDomain(System.getenv("AUTH_WEBAPP_DOMAIN"));
+        response.addCookie(ssoToken);
         response.setStatus(302);
         response.setHeader("Location", redirectUrl);
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", System.getenv("AUTH_WEBAPP_ORIGIN"));
     }
 
 

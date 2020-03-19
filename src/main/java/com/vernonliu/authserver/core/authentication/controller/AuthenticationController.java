@@ -14,7 +14,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/authentication")
@@ -29,11 +31,12 @@ public class AuthenticationController {
     @PostMapping("/login")
     @ResponseBody
     public void loginEndpoint(@RequestBody LoginRequestDTO loginRequest,
-                                           @RequestParam String redirectUrl,
-                                            HttpServletResponse response ) throws Exception {
-        if (StringUtils.isEmpty(redirectUrl)) throw new Exception("Missing redirectUrl");
+                                            HttpServletResponse response,
+                                            HttpServletRequest request ) throws Exception {
+        if (StringUtils.isEmpty(loginRequest.getRedirectUrl())) throw new Exception("Missing redirectUrl");
+        log.info(Arrays.toString(request.getCookies()));
         log.info(loginRequest.toString());
-        authenticationService.login(loginRequest, redirectUrl, response);
+        authenticationService.login(loginRequest, response);
     }
 
 }

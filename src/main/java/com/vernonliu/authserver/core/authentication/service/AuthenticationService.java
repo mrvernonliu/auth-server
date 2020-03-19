@@ -20,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class AuthenticationService {
 
+    private static final String AUTH_WEBAPP_DOMAIN = System.getenv("AUTH_WEBAPP_DOMAIN");
+    private static final String AUTH_WEBAPP_ORIGIN = System.getenv("AUTH_WEBAPP_ORIGIN");
+
     @Autowired
     AccountService accountService;
 
@@ -31,7 +34,7 @@ public class AuthenticationService {
 
     @Autowired
     JwtService jwtService;
-    
+
     public void login(LoginRequestDTO loginRequest, HttpServletResponse response) throws Exception {
         Client client = clientService.getClientFromId(loginRequest.getClientUuid());
         Account account = accountService.getAccount(loginRequest.getEmail(), client);
@@ -52,12 +55,14 @@ public class AuthenticationService {
 
     private void generateAuthenticationResponse(HttpServletResponse response, Client client, String redirectUrl, String jwt) {
         Cookie ssoToken = new Cookie("ssoToken", jwt);
-        ssoToken.setDomain(System.getenv("AUTH_WEBAPP_DOMAIN"));
+        ssoToken.setDomain(AUTH_WEBAPP_DOMAIN);
+        ssoToken.isHttpOnly();
+        ssoToken.setSecure(true);
         response.addCookie(ssoToken);
         response.setStatus(302);
         response.setHeader("Location", redirectUrl);
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Origin", System.getenv("AUTH_WEBAPP_ORIGIN"));
+        response.setHeader("Access-Control-Allow-Origin", AUTH_WEBAPP_ORIGIN);
     }
 
 

@@ -1,0 +1,17 @@
+# This docker-compose file is meant for testing, it will not deploy the full application
+version: '2'
+services:
+  auth-server:
+    image: mrvernonliu/auth-server:0.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      - AUTHENTICATION_DB_USER=${AUTHENTICATION_DB_USER}
+      - AUTHENTICATION_DB_PASSWORD=${AUTHENTICATION_DB_PASSWORD}
+      - AUTHENTICATION_DB_NAME=${AUTHENTICATION_DB_NAME}
+      - AUTHENTICATION_DB_HOST=${AUTHENTICATION_DB_HOST}
+      - AUTHENTICATION_DB_PORT=${AUTHENTICATION_DB_PORT}
+      - AUTHENTICATION_DB_SSL=${AUTHENTICATION_DB_SSL}
+      - AUTH_SERVER_HOST=${AUTH_SERVER_HOST}
+      - AUTH_WEBAPP_ORIGIN=${AUTH_WEBAPP_ORIGIN}
+      - AUTH_WEBAPP_DOMAIN=${AUTH_WEBAPP_DOMAIN}

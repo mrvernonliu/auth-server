@@ -62,7 +62,7 @@ public class AuthenticationService {
         //ssoToken.setSecure(true);
         ssoToken.setMaxAge(28800); //8 hours
         response.addCookie(ssoToken);
-        response.setStatus(200);
+        response.setStatus(302);
         response.setHeader("Location", redirectUrl);
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", AUTH_WEBAPP_ORIGIN);

@@ -23,7 +23,7 @@ public class ClientService {
 
     public String getClientNameFromId(String clientUuid) {
         String clientName = clientDAO.findById(UUID.fromString(clientUuid)).getClientName();
-        log.info(clientName);
+        log.info("Getting information: " + clientUuid + " - " + clientName);
         return clientName;
     }
 }

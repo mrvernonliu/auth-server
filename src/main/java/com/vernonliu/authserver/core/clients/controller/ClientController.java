@@ -46,6 +46,7 @@ public class ClientController {
         return registrationService.generateNewRegistrationCode();
     }
 
+    //TODO: refactor this into a precheck for cookies
     @PostMapping("/info/{clientUuid}")
     @ResponseBody
     @CrossOrigin

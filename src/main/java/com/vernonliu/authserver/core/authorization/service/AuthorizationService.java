@@ -44,6 +44,8 @@ public class AuthorizationService {
         if (opt.isEmpty()) return null;
         AccessCode accessCode = opt.get();
         // TODO: check if expired
-        return accessCode.getAccount();
+        Account account = accessCode.getAccount();
+        accessCodeDAO.delete(accessCode);
+        return account;
     }
 }

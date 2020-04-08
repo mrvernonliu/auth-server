@@ -35,6 +35,13 @@ public class CryptographyService {
         client.setPublicKey(publicKey);
     }
 
+    public String generateRandomToken() throws Exception {
+        byte[] randomBytes = new byte[64];
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        random.nextBytes(randomBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+    }
+
     private String privateKeyToString(PrivateKey key) {
         StringBuilder sb = new StringBuilder();
         sb.append("-----BEGIN PRIVATE KEY-----\n");

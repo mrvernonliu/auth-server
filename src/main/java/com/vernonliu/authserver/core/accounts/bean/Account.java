@@ -61,7 +61,6 @@ public class Account {
         this.hashedPassword = hashedPassword;
         this.client = client;
         this.lastLoggedIn = new Date();
-
     }
 
 }

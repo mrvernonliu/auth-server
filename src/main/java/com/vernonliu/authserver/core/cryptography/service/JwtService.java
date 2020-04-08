@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -32,5 +33,32 @@ public class JwtService {
                 .compact();
         // DO MORE THINGS
         return jwt;
+    }
+
+    public Map<String, String> generateIdentityAndAuthorizationTokens(Account account) throws Exception{
+        Client client = account.getClient();
+        Key privateKey = cryptographyService.privateKeyToKeyObject(client.getPrivateKey());
+        String ti = Jwts.builder()
+                .setIssuer(hostname)
+                .setAudience(client.getClientName())
+                .setSubject(account.getEmail())
+                .claim("firstname", account.getFirstname())
+                .claim("lastname", account.getLastname())
+                .setIssuedAt(new Date())
+                .setExpiration(DateUtil.getDatePlusHours(3))
+                .signWith(privateKey)
+                .compact();
+
+        String ta = Jwts.builder() //TODO: set claims
+                .setIssuer(hostname)
+                .setAudience(client.getClientName())
+                .setSubject(account.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(DateUtil.getDatePlusHours(3))
+                .claim("scope", "TODO")
+                .signWith(privateKey)
+                .compact();
+
+        return Map.of("ti", ti, "ta", ta);
     }
 }

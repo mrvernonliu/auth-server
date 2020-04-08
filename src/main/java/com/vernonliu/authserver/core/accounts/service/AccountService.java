@@ -45,7 +45,7 @@ public class AccountService {
         return accountDAO.findByEmailAndClient(email, client);
      }
 
-     public void updateLastLogin(Account account) {
+     public void updateAccount(Account account) {
         account.setLastLoggedIn(new Date());
         accountDAO.save(account);
      }

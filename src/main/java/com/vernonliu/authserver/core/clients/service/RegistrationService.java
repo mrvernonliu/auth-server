@@ -28,7 +28,7 @@ public class RegistrationService {
         if (registrationCode == null) {
             throw new Exception("Registration code is invalid");
         }
-        Client newClient = new Client(clientRegistrationDTO, registrationCode);
+        Client newClient = new Client(clientRegistrationDTO, registrationCode, cryptographyService.generateRandomToken());
         cryptographyService.generateAsymmetricalKeys(newClient);
         clientDAO.save(newClient);
         registrationCode.setRegistered(true);

@@ -31,8 +31,7 @@ public class Client {
     String clientName;
 
     @Column(name = "clientSecret", unique = true, nullable = false)
-    @Type(type = "uuid-char")
-    UUID clientSecret;
+    String clientSecret;
 
     @Column(name = "flowType", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -61,14 +60,14 @@ public class Client {
     @JoinColumn(name = "registration_codes")
     RegistrationCode registrationCode;
 
-    public Client(ClientRegistrationDTO clientDTO, RegistrationCode registrationCode) {
+    public Client(ClientRegistrationDTO clientDTO, RegistrationCode registrationCode, String clientSecret) {
         this.clientName = clientDTO.getClientName();
         this.adminAdmin = clientDTO.getAdminEmail();
         this.flowType = clientDTO.getFlowType();
         this.tokenType = clientDTO.getTokenType();
         this.adminAdmin = clientDTO.getAdminEmail();
         this.registrationCode = registrationCode;
-        this.clientSecret = UUID.randomUUID();
+        this.clientSecret = clientSecret;
         // Do key stuff later
     }
 }

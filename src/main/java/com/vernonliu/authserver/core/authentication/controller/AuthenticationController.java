@@ -30,12 +30,13 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     @ResponseBody
-    public void loginEndpoint(@RequestBody LoginRequestDTO loginRequest,
+    public String loginEndpoint(@RequestBody LoginRequestDTO loginRequest,
                                             HttpServletResponse response,
                                             HttpServletRequest request ) throws Exception {
         if (StringUtils.isEmpty(loginRequest.getRedirectUrl())) throw new Exception("Missing redirectUrl");
         log.info(loginRequest.toString());
-        authenticationService.login(loginRequest, response);
+        String accessCode = authenticationService.login(loginRequest, response);
+        return loginRequest.getRedirectUrl() + "?accessCode=" + accessCode; // TODO: append access code as URL param
     }
 
 }

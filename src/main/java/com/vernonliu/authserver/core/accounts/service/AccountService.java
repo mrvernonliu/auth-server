@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -54,5 +55,9 @@ public class AccountService {
     public void updateAccount(Account account, ReferenceToken referenceToken) {
         account.setReferenceToken(referenceToken);
         updateAccount(account);
+    }
+
+    public Account getAccount(String accountId) {
+        return accountDAO.findById(UUID.fromString(accountId));
     }
 }

@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Table(name = "refreshTokens")
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class RefreshToken {
@@ -29,8 +31,13 @@ public class RefreshToken {
     @Column
     Date expirationDate;
 
+    @Column
+    @NotNull
+    UUID accountUuid;
 
-    public RefreshToken() {
+
+    public RefreshToken(UUID accountUuid) {
+        this.accountUuid = accountUuid;
         this.expirationDate = DateUtil.getDatePlusHours(24);
     }
 }

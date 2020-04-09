@@ -104,10 +104,11 @@ public class AuthorizationService {
 
 
     public String createRefreshToken(Account account) throws Exception {
+        log.info("Making Refresh Token for accountid: {}", account.getId());
         if (account.getRefreshToken() == null
                 || account.getRefreshToken()
                 .getExpirationDate().before(new Date())) {
-            RefreshToken refreshToken = new RefreshToken();
+            RefreshToken refreshToken = new RefreshToken(account.getId());
             refreshTokenDAO.save(refreshToken);
             account.setRefreshToken(refreshToken);
         }

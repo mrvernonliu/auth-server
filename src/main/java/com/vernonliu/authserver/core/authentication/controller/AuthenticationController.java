@@ -1,7 +1,9 @@
 package com.vernonliu.authserver.core.authentication.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vernonliu.authserver.core.accounts.service.AccountService;
 import com.vernonliu.authserver.core.authentication.dto.LoginRequestDTO;
+import com.vernonliu.authserver.core.authentication.dto.RefreshDTO;
 import com.vernonliu.authserver.core.authentication.service.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
@@ -37,6 +39,15 @@ public class AuthenticationController {
         log.info(loginRequest.toString());
         String accessCode = authenticationService.login(loginRequest, response);
         return loginRequest.getRedirectUrl() + "?accessCode=" + accessCode; // TODO: append access code as URL param
+    }
+
+    @PostMapping("/refresh")
+    @ResponseBody
+    public String refreshEndpoint(@RequestBody RefreshDTO refreshDTO
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String accessCode = authenticationService.refreshLogin(refreshDTO, request, response);
+        if (accessCode == null) response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        return refreshDTO.getRedirectUrl() + "?accessCode=" + accessCode;
     }
 
 }

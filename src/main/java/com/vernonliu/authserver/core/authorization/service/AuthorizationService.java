@@ -4,8 +4,10 @@ import com.vernonliu.authserver.core.accounts.bean.Account;
 import com.vernonliu.authserver.core.accounts.service.AccountService;
 import com.vernonliu.authserver.core.authorization.bean.ReferenceToken;
 import com.vernonliu.authserver.core.authorization.bean.AccessCode;
+import com.vernonliu.authserver.core.authorization.bean.RefreshToken;
 import com.vernonliu.authserver.core.authorization.dao.AccessCodeDAO;
-import com.vernonliu.authserver.core.authorization.dao.ReferenceTokenDao;
+import com.vernonliu.authserver.core.authorization.dao.ReferenceTokenDAO;
+import com.vernonliu.authserver.core.authorization.dao.RefreshTokenDAO;
 import com.vernonliu.authserver.core.authorization.dto.AccessCodeExchangeDTO;
 import com.vernonliu.authserver.core.authorization.dto.ReferenceTokenValidationDTO;
 import com.vernonliu.authserver.core.clients.bean.Client;
@@ -41,7 +43,10 @@ public class AuthorizationService {
     AccessCodeDAO accessCodeDAO;
 
     @Autowired
-    ReferenceTokenDao referenceTokenDao;
+    ReferenceTokenDAO referenceTokenDao;
+
+    @Autowired
+    RefreshTokenDAO refreshTokenDAO;
 
     // TODO: This class is susceptible to accessCode ID collisions, fix later
     public String createAccessCode(Account account) throws Exception {
@@ -98,4 +103,15 @@ public class AuthorizationService {
     }
 
 
+    public String createRefreshToken(Account account) throws Exception {
+        if (account.getRefreshToken() == null
+                || account.getRefreshToken()
+                .getExpirationDate().before(new Date())) {
+            RefreshToken refreshToken = new RefreshToken();
+            refreshTokenDAO.save(refreshToken);
+            account.setRefreshToken(refreshToken);
+        }
+        accountService.updateAccount(account);
+        return jwtService.generateRefreshToken(account);
+    }
 }

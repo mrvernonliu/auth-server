@@ -47,9 +47,9 @@ public class AuthenticationService {
             log.info("{} logged in", account.getId());
             String accessCode = authorizationService.createAccessCode(account);
             accountService.updateAccount(account);
-            String jwt = jwtService.createSSOToken(account, client);
-            if (!StringUtils.isEmpty(jwt)) {
-                generateAuthenticationResponse(response, client, loginRequest.getRedirectUrl(), jwt);
+            String refreshToken = authorizationService.createRefreshToken(account);
+            if (!StringUtils.isEmpty(refreshToken)) {
+                generateAuthenticationResponse(response, client, loginRequest.getRedirectUrl(), refreshToken);
             }
             return accessCode;
         }
@@ -60,11 +60,11 @@ public class AuthenticationService {
 
     //TODO: make secure tokens
     private void generateAuthenticationResponse(HttpServletResponse response, Client client, String redirectUrl, String jwt) {
-        Cookie ssoToken = new Cookie("ssoToken", jwt);
-        ssoToken.setDomain(AUTH_WEBAPP_DOMAIN);
-        ssoToken.setPath("/");
-        ssoToken.setMaxAge(28800); //8 hours
-        response.addCookie(ssoToken);
+        Cookie refreshToken = new Cookie("refresh", jwt);
+        refreshToken.setDomain(AUTH_WEBAPP_DOMAIN);
+        refreshToken.setPath("/");
+        refreshToken.setMaxAge(24); //24 hours
+        response.addCookie(refreshToken);
         response.setStatus(200);
         response.setHeader("Location", redirectUrl);
         response.setHeader("Access-Control-Allow-Credentials", "true");

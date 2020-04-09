@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ReferenceTokenDao extends JpaRepository<ReferenceToken, UUID> {
+public interface ReferenceTokenDAO extends JpaRepository<ReferenceToken, UUID> {
 }

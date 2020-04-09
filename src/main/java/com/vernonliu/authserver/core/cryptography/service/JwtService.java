@@ -1,6 +1,7 @@
 package com.vernonliu.authserver.core.cryptography.service;
 
 import com.vernonliu.authserver.core.accounts.bean.Account;
+import com.vernonliu.authserver.core.authorization.bean.RefreshToken;
 import com.vernonliu.authserver.core.clients.bean.Client;
 import com.vernonliu.authserver.core.clients.bean.TokenType;
 import com.vernonliu.authserver.utils.DateUtil;
@@ -112,5 +113,20 @@ public class JwtService {
             return null;
         }
         return claims.get(key).toString();
+    }
+
+    public String generateRefreshToken(Account account) throws Exception {
+        Client client = account.getClient();
+        Key privateKey = cryptographyService.privateKeyToKeyObject(client.getPrivateKey());
+        String jwt = Jwts.builder()
+                .setIssuer(hostname)
+                .setAudience(client.getClientName())
+                .setSubject(account.getId().toString())
+                .claim("refreshId", account.getRefreshToken())
+                .setIssuedAt(new Date())
+                .setExpiration(DateUtil.getDatePlusHours(3))
+                .signWith(privateKey)
+                .compact();
+        return jwt;
     }
 }

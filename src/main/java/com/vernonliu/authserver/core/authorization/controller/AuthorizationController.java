@@ -2,7 +2,6 @@ package com.vernonliu.authserver.core.authorization.controller;
 
 import com.vernonliu.authserver.core.accounts.bean.Account;
 import com.vernonliu.authserver.core.authorization.bean.ReferenceToken;
-import com.vernonliu.authserver.core.authorization.dao.ReferenceTokenDao;
 import com.vernonliu.authserver.core.authorization.dto.AccessCodeExchangeDTO;
 import com.vernonliu.authserver.core.authorization.dto.ReferenceTokenValidationDTO;
 import com.vernonliu.authserver.core.authorization.service.AuthorizationService;

@@ -8,4 +8,4 @@ CMD ["ls"]
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "auth-server-0.0.1.jar"]
+CMD ["java", "-jar", "auth-server-0.0.2.jar"]

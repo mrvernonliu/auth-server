@@ -2,10 +2,9 @@ package com.vernonliu.authserver.core.authorization.service;
 
 import com.vernonliu.authserver.core.accounts.bean.Account;
 import com.vernonliu.authserver.core.accounts.service.AccountService;
-import com.vernonliu.authserver.core.authorization.dao.AccessCodeDAO;
 import com.vernonliu.authserver.core.authorization.bean.AccessCode;
+import com.vernonliu.authserver.core.authorization.dao.AccessCodeDAO;
 import com.vernonliu.authserver.core.authorization.dto.AccessCodeExchangeDTO;
-import com.vernonliu.authserver.core.clients.bean.Client;
 import com.vernonliu.authserver.core.clients.service.ClientService;
 import com.vernonliu.authserver.core.cryptography.service.CryptographyService;
 import lombok.extern.slf4j.Slf4j;

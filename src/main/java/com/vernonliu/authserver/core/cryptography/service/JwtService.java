@@ -4,15 +4,15 @@ import com.vernonliu.authserver.core.accounts.bean.Account;
 import com.vernonliu.authserver.core.clients.bean.Client;
 import com.vernonliu.authserver.utils.DateUtil;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Service
+@Slf4j
 public class JwtService {
 
     private static final String hostname = System.getenv("AUTH_SERVER_HOST");

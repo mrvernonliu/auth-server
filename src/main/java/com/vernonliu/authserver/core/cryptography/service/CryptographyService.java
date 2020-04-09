@@ -33,7 +33,7 @@ public class CryptographyService {
 
         client.setPrivateKey(kp.getPrivate().getEncoded()); //TODO: this should be encrypted before going into DB
         client.setPublicKey(publicKey);
-    }
+}
 
     public String generateRandomToken() throws Exception {
         byte[] randomBytes = new byte[64];

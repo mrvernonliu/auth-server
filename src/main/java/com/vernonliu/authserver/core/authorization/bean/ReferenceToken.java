@@ -1,39 +1,45 @@
 package com.vernonliu.authserver.core.authorization.bean;
 
 import com.vernonliu.authserver.core.accounts.bean.Account;
-import com.vernonliu.authserver.core.clients.bean.Client;
 import com.vernonliu.authserver.utils.DateUtil;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-
+import java.util.UUID;
 
 @Entity
-@Table(name = "accessCodes")
+@Table(name = "referenceTokens")
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Getter
 @Setter
-public class AccessCode {
+public class ReferenceToken {
 
     @Id
-    String accessCode;
+    @GeneratedValue
+    @Type(type = "uuid-char")
+    UUID id;
 
     @OneToOne
-    @JoinColumn(name="accounts")
+    @JoinColumn(name = "accounts")
     Account account;
 
     @Column
     Date expirationDate;
 
-    public AccessCode (String accessCode, Account account) {
-        this.accessCode = accessCode;
-        this.account = account;
-        this.expirationDate = DateUtil.getDatePlusHours(1);
-    }
+    @Column
+    String scope;
 
+    public ReferenceToken(Account account) {
+        this.account = account;
+        this.expirationDate = DateUtil.getDatePlusHours(3);
+        this.scope = "SCOPE_NOT_IMPLEMENTED";
+    }
 }

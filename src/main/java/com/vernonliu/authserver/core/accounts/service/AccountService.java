@@ -3,6 +3,7 @@ package com.vernonliu.authserver.core.accounts.service;
 import com.vernonliu.authserver.core.accounts.bean.Account;
 import com.vernonliu.authserver.core.accounts.dao.AccountDAO;
 import com.vernonliu.authserver.core.accounts.dto.NewAccountRequestDTO;
+import com.vernonliu.authserver.core.authorization.bean.ReferenceToken;
 import com.vernonliu.authserver.core.clients.bean.Client;
 import com.vernonliu.authserver.core.clients.service.ClientService;
 import com.vernonliu.authserver.core.cryptography.service.CryptographyService;
@@ -49,4 +50,9 @@ public class AccountService {
         account.setLastLoggedIn(new Date());
         accountDAO.save(account);
      }
+
+    public void updateAccount(Account account, ReferenceToken referenceToken) {
+        account.setReferenceToken(referenceToken);
+        updateAccount(account);
+    }
 }

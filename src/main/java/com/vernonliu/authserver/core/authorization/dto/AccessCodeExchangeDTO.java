@@ -2,15 +2,18 @@ package com.vernonliu.authserver.core.authorization.dto;
 
 import com.vernonliu.authserver.core.clients.bean.FlowType;
 import com.vernonliu.authserver.core.clients.bean.TokenType;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
-import lombok.Value;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @ToString
-@Value
-@AllArgsConstructor
-public class AccessCodeExchangeDTO {
+@Getter
+@Setter
+public class AccessCodeExchangeDTO extends GenericClientTokenDTO {
     String accessCode;
-    String clientUuid;
-    String clientSecret;
+
+    public AccessCodeExchangeDTO (String accessCode, String clientUuid, String clientSecret) {
+        super(clientUuid, clientSecret);
+        this.accessCode = accessCode;
+    }
+
 }

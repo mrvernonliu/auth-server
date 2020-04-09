@@ -63,8 +63,6 @@ public class AuthenticationService {
         Cookie ssoToken = new Cookie("ssoToken", jwt);
         ssoToken.setDomain(AUTH_WEBAPP_DOMAIN);
         ssoToken.setPath("/");
-        //ssoToken.isHttpOnly();
-        //ssoToken.setSecure(true);
         ssoToken.setMaxAge(28800); //8 hours
         response.addCookie(ssoToken);
         response.setStatus(200);

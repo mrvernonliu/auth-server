@@ -6,7 +6,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 @Service
@@ -62,5 +64,18 @@ public class CryptographyService {
         KeyFactory keyFactory = KeyFactory.getInstance("EC");
         PKCS8EncodedKeySpec encodedKeySpec = new PKCS8EncodedKeySpec(key);
         return keyFactory.generatePrivate(encodedKeySpec);
+    }
+
+    public Key decodePublicKey(String publicKeyPEM) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        publicKeyPEM = publicKeyPEM.replace("-----BEGIN PUBLIC KEY-----", "");
+        publicKeyPEM = publicKeyPEM.replace("-----END PUBLIC KEY-----", "");
+        publicKeyPEM = publicKeyPEM.replace("\n", "");
+        log.info("publicKey: {}", publicKeyPEM);
+        byte[] key = Base64.getDecoder().decode(publicKeyPEM);
+
+        // create a key object from the bytes
+        KeyFactory keyFactory = KeyFactory.getInstance("EC");
+        X509EncodedKeySpec encodedKeySpec = new X509EncodedKeySpec(key);
+        return keyFactory.generatePublic(encodedKeySpec);
     }
 }

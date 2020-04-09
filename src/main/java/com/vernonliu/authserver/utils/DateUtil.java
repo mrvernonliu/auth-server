@@ -12,6 +12,6 @@ public class DateUtil {
 
     public static Date getDatePlusHours(int hours) {
         Calendar now = Calendar.getInstance();
-        return new Date(now.getTimeInMillis() + hours*HOUR_MULTIPLIER);
+        return new Date(now.getTimeInMillis() + hours*HOUR_MULTIPLIER*60);
     }
 }

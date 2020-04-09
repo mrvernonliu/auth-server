@@ -1,6 +1,7 @@
 package com.vernonliu.authserver.core.accounts.bean;
 
 import com.vernonliu.authserver.core.accounts.dto.NewAccountRequestDTO;
+import com.vernonliu.authserver.core.authorization.bean.ReferenceToken;
 import com.vernonliu.authserver.core.clients.bean.Client;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -44,6 +45,10 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "client")
     Client client;
+
+    @OneToOne
+    @JoinColumn(name="referenceTokens")
+    ReferenceToken referenceToken;
 
     @Column
     @CreatedDate

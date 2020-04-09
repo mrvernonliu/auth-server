@@ -24,6 +24,7 @@ public class RegistrationService {
     CryptographyService cryptographyService;
 
     public Client registerNewClient(ClientRegistrationDTO clientRegistrationDTO) throws Exception{
+        log.info(clientRegistrationDTO.toString());
         RegistrationCode registrationCode = validateRegistrationCode(clientRegistrationDTO.getRegistration_code());
         if (registrationCode == null) {
             throw new Exception("Registration code is invalid");

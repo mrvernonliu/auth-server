@@ -89,7 +89,7 @@ public class AuthorizationService {
     }
 
     private ReferenceToken validateReferenceToken(ReferenceToken referenceToken) {
-        if (referenceToken.getExpirationDate().after(new Date())) {
+        if (referenceToken.getExpirationDate().before(new Date())) {
             log.error("Reference token expired: {}", referenceToken.getId());
             return null;
         }

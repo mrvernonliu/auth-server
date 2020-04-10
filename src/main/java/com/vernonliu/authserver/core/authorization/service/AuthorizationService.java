@@ -9,6 +9,7 @@ import com.vernonliu.authserver.core.authorization.dao.AccessCodeDAO;
 import com.vernonliu.authserver.core.authorization.dao.ReferenceTokenDAO;
 import com.vernonliu.authserver.core.authorization.dao.RefreshTokenDAO;
 import com.vernonliu.authserver.core.authorization.dto.AccessCodeExchangeDTO;
+import com.vernonliu.authserver.core.authorization.dto.LogoutDTO;
 import com.vernonliu.authserver.core.authorization.dto.ReferenceTokenValidationDTO;
 import com.vernonliu.authserver.core.clients.bean.Client;
 import com.vernonliu.authserver.core.clients.service.ClientService;
@@ -18,6 +19,7 @@ import com.vernonliu.authserver.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.Optional;
@@ -84,12 +86,12 @@ public class AuthorizationService {
 
     public ReferenceToken validateReferenceToken(ReferenceTokenValidationDTO referenceTokenValidationDTO) {
         if (!clientService.validateClientCredentials(referenceTokenValidationDTO)) return null;
-        Client client = clientService.getClientFromId(referenceTokenValidationDTO.getClientUuid());
-        String referenceTokenUuid = jwtService.decodeAndGetValue(
-                referenceTokenValidationDTO.getReferenceToken(), client,"referenceToken");
-        Optional<ReferenceToken> referenceTokenOptional = referenceTokenDao.findById(UUID.fromString(referenceTokenUuid));
+        Optional<ReferenceToken> referenceTokenOptional = referenceTokenDao.findById(UUID.fromString(referenceTokenValidationDTO.getReferenceToken()));
         if (referenceTokenOptional.isEmpty()) return null;
         ReferenceToken referenceToken = referenceTokenOptional.get();
+        Account account = accountService.getAccount(referenceTokenValidationDTO.getAccountUuid());
+        if (account == null) return null;
+        if (account.getReferenceToken().getId().compareTo(referenceToken.getId()) != 0) return null;
         return validateReferenceToken(referenceToken);
     }
 
@@ -120,5 +122,22 @@ public class AuthorizationService {
         }
         accountService.updateAccount(account);
         return jwtService.generateRefreshToken(account);
+    }
+
+    public boolean logout(LogoutDTO logoutDTO) {
+        if (!clientService.validateClientCredentials(logoutDTO)) return false;
+        Account account = accountService.getAccount(logoutDTO.getAccountUuid());
+        if (account == null) return false;
+        if (!StringUtils.isEmpty(account.getReferenceToken())) {
+            ReferenceToken referenceToken = account.getReferenceToken();
+            account.setReferenceToken(null);
+            accountService.updateAccount(account);
+            referenceTokenDao.delete(referenceToken);
+        }
+        RefreshToken refreshToken = account.getRefreshToken();
+        account.setRefreshToken(null);
+        accountService.updateAccount(account);
+        if (refreshToken != null) refreshTokenDAO.delete(refreshToken);
+        return true;
     }
 }

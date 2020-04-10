@@ -6,11 +6,13 @@ import lombok.*;
 @Getter
 @Setter
 public class ReferenceTokenValidationDTO extends GenericClientTokenDTO{
+    String accountUuid;
     String referenceToken;
 
-    public ReferenceTokenValidationDTO (String referenceToken, String clientUuid, String clientSecret) {
+    public ReferenceTokenValidationDTO (String referenceToken, String accountUuid, String clientUuid, String clientSecret) {
         super(clientUuid, clientSecret);
         this.referenceToken = referenceToken;
+        this.accountUuid = accountUuid;
     }
 
 }

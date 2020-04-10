@@ -50,5 +50,4 @@ public class AuthenticationController {
         if (accessCode == null) response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         return refreshDTO.getRedirectUrl() + "?accessCode=" + accessCode;
     }
-
 }

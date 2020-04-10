@@ -3,6 +3,7 @@ package com.vernonliu.authserver.core.authorization.controller;
 import com.vernonliu.authserver.core.accounts.bean.Account;
 import com.vernonliu.authserver.core.authorization.bean.ReferenceToken;
 import com.vernonliu.authserver.core.authorization.dto.AccessCodeExchangeDTO;
+import com.vernonliu.authserver.core.authorization.dto.LogoutDTO;
 import com.vernonliu.authserver.core.authorization.dto.ReferenceTokenValidationDTO;
 import com.vernonliu.authserver.core.authorization.service.AuthorizationService;
 import com.vernonliu.authserver.core.clients.bean.TokenType;
@@ -50,10 +51,20 @@ public class AuthorizationController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    @PostMapping("reference-token-validation")
+    @PostMapping("/reference-token-validation")
     @CrossOrigin
     public ResponseEntity<?> validateReferenceToken(@RequestBody ReferenceTokenValidationDTO referenceTokenValidationDTO) {
+        log.info("Reference Validation: {}", referenceTokenValidationDTO);
         if (authorizationService.validateReferenceToken(referenceTokenValidationDTO) == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/logout")
+    @CrossOrigin
+    public ResponseEntity<?> logout(@RequestBody LogoutDTO logoutDTO) {
+        log.info("Logout: {}", logoutDTO.toString());
+        if (!authorizationService.logout(logoutDTO)) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

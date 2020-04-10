@@ -45,6 +45,7 @@ public class AuthenticationController {
     @ResponseBody
     public String refreshEndpoint(@RequestBody RefreshDTO refreshDTO
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        log.info("Checking refresh: {}", refreshDTO.toString());
         String accessCode = authenticationService.refreshLogin(refreshDTO, request, response);
         if (accessCode == null) response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         return refreshDTO.getRedirectUrl() + "?accessCode=" + accessCode;

@@ -111,6 +111,12 @@ public class AuthorizationService {
             RefreshToken refreshToken = new RefreshToken(account.getId());
             refreshTokenDAO.save(refreshToken);
             account.setRefreshToken(refreshToken);
+            log.info("Created new refresh token for account {}, token: {}", account.getId(), refreshToken.getId());
+        } else {
+            RefreshToken refreshToken = account.getRefreshToken();
+            refreshToken.setExpirationDate(DateUtil.getDatePlusHours(24));
+            refreshTokenDAO.save(refreshToken);
+            log.info("Updated refresh token for account {}, token: {}", account.getId(), refreshToken.getId());
         }
         accountService.updateAccount(account);
         return jwtService.generateRefreshToken(account);

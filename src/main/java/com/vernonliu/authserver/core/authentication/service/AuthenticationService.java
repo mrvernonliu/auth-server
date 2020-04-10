@@ -58,7 +58,7 @@ public class AuthenticationService {
             accountService.updateAccount(account);
             String refreshToken = authorizationService.createRefreshToken(account);
             if (!StringUtils.isEmpty(refreshToken)) {
-                generateAuthenticationResponse(response, client, loginRequest.getRedirectUrl(), refreshToken);
+                generateAuthenticationResponse(response, loginRequest.getRedirectUrl(), refreshToken);
             }
             return accessCode;
         }
@@ -68,7 +68,10 @@ public class AuthenticationService {
     }
 
     public String refreshLogin(RefreshDTO refreshDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (request == null || request.getCookies() == null) return null;
+        if (request == null || request.getCookies() == null) {
+            log.warn("Cannot refresh - no cookies attached");
+            return null;
+        }
         Cookie refreshCookie = Arrays.stream(request.getCookies())
                 .filter((cookie) -> "refresh".equals(cookie.getName()))
                 .findFirst()
@@ -89,14 +92,29 @@ public class AuthenticationService {
         String accountId = refreshMap.get("accountUuid");
         String refreshId = refreshMap.get("id");
         Account account = accountService.getAccount(accountId);
-        if (refreshId == null || account == null || account.getRefreshToken() == null) return null;
-        if (!refreshId.equals(account.getRefreshToken().getId().toString())) return null;
-
+        if (account == null) {
+            log.warn("Cannot refresh, account does not exist");
+            return null;
+        }
+        if (refreshId == null || account.getRefreshToken() == null) {
+            log.warn("Could not refresh - One of the following is null: {} {} {}", refreshId, account, account.getRefreshToken());
+            return null;
+        }
+        if (!refreshId.equals(account.getRefreshToken().getId().toString())) {
+            log.warn("Refresh Token Invalid: {} - {}", refreshId, account.getRefreshToken().getId());
+            return null;
+        }
+        String refreshToken = jwtService.generateRefreshToken(account);
+        if (StringUtils.isEmpty(refreshToken)) {
+            log.warn("Could not refresh - failed to update token");
+            return null;
+        }
+        generateAuthenticationResponse(response, refreshDTO.getRedirectUrl(), refreshToken);
         return authorizationService.createAccessCode(account);
     }
 
     //TODO: make secure tokens
-    private void generateAuthenticationResponse(HttpServletResponse response, Client client, String redirectUrl, String jwt) {
+    private void generateAuthenticationResponse(HttpServletResponse response, String redirectUrl, String jwt) {
         Cookie refreshToken = new Cookie("refresh", jwt);
         refreshToken.setDomain(AUTH_WEBAPP_DOMAIN);
         refreshToken.setPath("/");

@@ -50,7 +50,7 @@ docker build -t mrvernonliu/auth-server:0.0.2 .
 /api/authorization/logout
 - `{
 	"accountUuid": "22222222-2222-2222-2222-222222222222", "eyJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJhdXRoLnZlcm5vbmxpdS5jb20iLCJpYXQiOjE1ODY0MTk5NTYsImV4cCI6MTU4NjQzMDc1Niwic3ViIjoiNDc1YTI4MDYtNGY1OC00NmY4LWE2YWItZGZlMTc1MDNjNzNkIiwicmVmZXJlbmNlVG9rZW4iOiJlNGViZjU0NC00ZmU0LTRiNTItYjI5Ny03MmFjM2M5NjAwYWQifQ.GxX_WqT-_pcFs-2ordRb7Ky4ozQ4jdTjMocC_sqe81BFPYeCSka8D-PpRIkrnyc7smrGfqqNIoxOV8NqnMNBdg",
-	"clientUuid": "ebb81ddb-4dbe-464a-88b5-0e8468066bc8",
+	"clientUuid": "11111111-1111-1111-1111-111111111111",
 	"clientSecret": "dtTB9LsmNsZgyN8qEcowXYE-hj-AoP-2i9FssTe5tAUwaP0MP35O5Rje8TlottQM7JcC8DXX95iJJoSf0t4NPw"
 }`
 
